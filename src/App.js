@@ -1,26 +1,26 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Person from "./Component/Person/Person"
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-         WElcome Prakhar
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  changeName = () => {
+    console.log("change name");
+  }
+  closeFn = (event) => {
+    console.log(event.target.closest(".card").remove());
+  }
+  render() {
+    return (
+      <div>
+        <Person name="Prakhar" clickMethod={this.changeName} close={this.closeFn} />
+        <Person name="Razz" clickMethod={this.changeName} close={this.closeFn} />
+        <Person name="Rohit" clickMethod={this.changeName} close={this.closeFn} />
+      </div>
+    );
+  }
+
+
+  
 }
 
 export default App;
