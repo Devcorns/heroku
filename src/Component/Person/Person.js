@@ -5,7 +5,7 @@ var Person = (props) => {
     console.log(props)
     
     return (
-        <div className="card">
+        <div className="card" id={props.id}>
             <h2>My Name is {props.name} </h2>
             <input onChange={props.clickMethod} type="text" />
             <span className="close" onClick={props.close}>Close</span>
