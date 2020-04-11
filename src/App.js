@@ -3,21 +3,16 @@ import './App.css';
 import Person from "./Component/Person/Person"
 
 class App extends React.Component {
-
-  
-
   state = {
     person: [
       {name:"Prakhar",id:"0"},
       {name:"Razz",id:"1"},
       {name:"Rohit",id:"2"}
-    ]
+    ],
+    toggle:true
   };
-
-
-
-  changeName = () => {
-    console.log("change name");
+  changeName = (e) => {
+    console.log("Name change event ")
   }
   closeFn = (eventId,event) => {
     console.log("This is event id",eventId,event)
@@ -34,15 +29,32 @@ class App extends React.Component {
       }
     })
   }
+
+  toggleFn = () => {
+    this.setState( {
+      toggle:!this.state.toggle
+    }
+    )
+  }
+
   render() {
-    let person = (
-      this.state.person.map((item,index)=> {
-        return <Person  name={item.name} clickMethod={this.changeName} close={this.closeFn.bind(this,item.id)}  key={index} id={item.id} />
-      })
-    );
+
+    if(this.state.toggle){
+      var person = (
+        this.state.person.map((item,index)=> {
+          return <Person  name={item.name} changeMethod={this.changeName}  close={this.closeFn.bind(this,item.id)}  key={index} id={item.id} />
+        })
+      );
+    }
+    
+    
+
     return (
       <div>
-        {person}
+        <button onClick={this.toggleFn}>Toggle Btns</button>
+        <div>
+          {person}
+        </div>
       </div>
     );
 
