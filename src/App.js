@@ -2,7 +2,27 @@ import React from 'react';
 import './App.css';
 import Person from "./Component/Person/Person"
 
+import ReactDOM from 'react-dom';
+
+
+import ApplyHigherOrderComponent from "./Component/applyHigherOrderComponent/ApplyHigherOrderComponent";
+import TryReactRedux from './Component/try-react-redux/TryReactRedux';
+
 class App extends React.Component {
+
+  constructor() {
+    super();
+   
+  }
+  
+  componentWillUnmount() {
+    console.log(this.state)
+  }
+  shouldComponentUpdate() {
+    console.log("Should component update...",this.state);
+    return true;
+  }
+
   state = {
     person: [
       {name:"Prakhar",id:"0"},
@@ -36,9 +56,12 @@ class App extends React.Component {
     }
     )
   }
+  functionCallFromParent = (count) =>{
+
+  }
 
   render() {
-
+    console.log(this.state);
     if(this.state.toggle){
       var person = (
         this.state.person.map((item,index)=> {
@@ -47,6 +70,8 @@ class App extends React.Component {
       );
     }
     
+
+
     
 
     return (
@@ -54,6 +79,14 @@ class App extends React.Component {
         <button onClick={this.toggleFn}>Toggle Btns</button>
         <div>
           {person}
+        </div>
+        <div>
+          <h1>Implementaition of higher order component</h1>
+          <ApplyHigherOrderComponent />
+        </div>
+        <div>
+          <h4>Try Redux Component</h4>
+          <TryReactRedux />
         </div>
       </div>
     );
