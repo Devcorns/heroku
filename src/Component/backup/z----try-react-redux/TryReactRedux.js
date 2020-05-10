@@ -47,10 +47,6 @@ class TryReactRedux extends React.Component {
             </React.Fragment>
         )
     }
-
-    
-
-
 }
 
 const mapStateToProps = state => {
@@ -68,4 +64,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
  
-export default connect(mapStateToProps,mapDispatchToProps)(TryReactRedux);
+export default connect(mapStateToProps, mapDispatchToProps)(TryReactRedux);

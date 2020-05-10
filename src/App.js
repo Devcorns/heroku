@@ -1,100 +1,61 @@
-import React from 'react';
-import './App.css';
-import Person from "./Component/Person/Person"
+import React from "react";
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link
+  } from "react-router-dom";
+import'bootstrap/dist/css/bootstrap.css';
+import {Navbar,Nav,Form,FormControl,Button,} from "react-bootstrap";
+import  './App.css';
 
-import ReactDOM from 'react-dom';
+import Login from "./Component/LoginLayout/Login";
+import Register from "./Component/LoginLayout/Register";
+import Dashboard from "./Component/BackendLayout/BackendLayout";
+import Profile from "./Component/Profile/Profile";
 
 
-import ApplyHigherOrderComponent from "./Component/applyHigherOrderComponent/ApplyHigherOrderComponent";
-import TryReactRedux from './Component/try-react-redux/TryReactRedux';
 
 class App extends React.Component {
 
-  constructor() {
-    super();
-   
-  }
-  
-  componentWillUnmount() {
-    console.log(this.state)
-  }
-  shouldComponentUpdate() {
-    console.log("Should component update...",this.state);
-    return true;
-  }
-
-  state = {
-    person: [
-      {name:"Prakhar",id:"0"},
-      {name:"Razz",id:"1"},
-      {name:"Rohit",id:"2"}
-    ],
-    toggle:true
-  };
-  changeName = (e) => {
-    console.log("Name change event ")
-  }
-  closeFn = (eventId,event) => {
-    console.log("This is event id",eventId,event)
-    this.state.person.map((item,index)=>{
-      if(item.id == eventId) {
-       let arr = this.state.person;
-        arr.splice(index,1);
-        console.log( arr );
-        this.setState(
-          {
-            person: arr
-          }
-        )
-      }
-    })
-  }
-
-  toggleFn = () => {
-    this.setState( {
-      toggle:!this.state.toggle
-    }
-    )
-  }
-  functionCallFromParent = (count) =>{
-
-  }
-
-  render() {
-    console.log(this.state);
-    if(this.state.toggle){
-      var person = (
-        this.state.person.map((item,index)=> {
-          return <Person  name={item.name} changeMethod={this.changeName}  close={this.closeFn.bind(this,item.id)}  key={index} id={item.id} />
-        })
-      );
-    }
-    
-
-
-    
-
-    return (
+    render(){
+        return(
+            <Router>
       <div>
-        <button onClick={this.toggleFn}>Toggle Btns</button>
-        <div>
-          {person}
-        </div>
-        <div>
-          <h1>Implementaition of higher order component</h1>
-          <ApplyHigherOrderComponent />
-        </div>
-        <div>
-          <h4>Try Redux Component</h4>
-          <TryReactRedux />
-        </div>
+      <Navbar bg="primary" variant="dark">
+      
+      <Link to="/" className="navbar-brand">Home</Link>
+    <Nav className="mr-auto">
+        <Link to="/login" className="nav-link">Login</Link>
+        
+        <Link to="/profile" className="nav-link">Profile</Link>
+    </Nav>
+    <Form inline>
+      <FormControl type="text" placeholder="Search" className="mr-sm-2" />
+      <Button variant="outline-light">Search</Button>
+    </Form>
+  </Navbar>
+        <Switch>
+          <Route exact path="/login">
+            <Login />
+          </Route>
+          <Route path="/register">
+            <Register />
+          </Route>
+          <Route path="/dashboard">
+            <Dashboard />
+          </Route>
+          <Route path="/profile">
+            <Profile />
+          </Route>
+        </Switch>
       </div>
-    );
+    </Router>
+        )
+    }
 
-  }
 
 
-  
 }
 
 export default App;
