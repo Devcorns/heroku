@@ -1,133 +1,18 @@
 import React from "react";
-import axios from "axios";
-import { Form,Button,Container,Row,Card,Col,InputGroup,FormControl } from "react-bootstrap";
 
-class Profile extends React.Component {
+import {Card, Form, Col, Row, Button} from "react-bootstrap";
+import './SearchEmployee.css';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faUser,faCoffee,faStar, faStarHalf, faStarHalfAlt, faPlus, faPlusCircle  } from "@fortawesome/free-solid-svg-icons";
+library.add(faUser,faCoffee,faStar,faStarHalf,faStarHalfAlt,faPlus, faPlusCircle );
 
-    constructor(props) {
-        super(props);
-        console.log(props)
-        //this.handleInputChange = this.handleInputChange.bind(this)
-    }
-    
-    state = {
-        authStr : localStorage.getItem("edb-token"),
-        getApiResponse:{},
-        userData: {},
-        validateRegx : {
-            username:""
-        }
-
-    }
-
-    handleInputChange = (e) => {
-        if(e.target.value.length >= 8) {
-            e.preventDefault();
-            var checkSpecialRgx = () => {
-                return new RegExp('^[a-zA-Z0-9]{8,20}$').test(e.target.value);
-            }
-            var getRgxOk = checkSpecialRgx();
-            if(getRgxOk) {
-                this.setState({
-                    validateRegx : {
-                        ...this.state.validateRegx,
-                        username:"Username "+ e.target.value +" is Valid"
-                    }
-                })
-                this.setState({
-                    userData: {
-                        ...this.state.userData,
-                        [e.target.name]: e.target.value
-                    }
-                });
-            } else {
-                this.setState({
-                    validateRegx : {
-                        ...this.state.validateRegx,
-                        username:"Try another USERNAME"
-                    }
-                })
-            }
-        } else {
-            this.setState({
-                validateRegx : {
-                    ...this.state.validateRegx,
-                    username:""
-                }
-            })
-        }
-
-       
-        console.log(this.state.userData)
-    }
-
-    componentDidMount() {
-        axios.get("http://localhost:3000/api/auth/getUser", { headers: { 'x-access-token': this.state.authStr } })
-        .then(response=>{
-            this.setState({
-                getApiResponse:response.data
-            })
-            console.log(response.data)
-        })
-        .catch((error) => {
-            console.log('error ' + error);
-         });
-    }
-
+class AddEmployee extends React.Component {
     render() {
-        console.log(this.state.getApiResponse);
-    return(
-        <main>
-            <Container>
-                <Card className="mb-4 d-none">
-                    <Card.Header as="h5">User Details</Card.Header>
-                    <Card.Body>
-                            <Form>
-                                <Form.Group as={Row} controlId="formPlaintextEmail">
-                                    <Form.Label className="font-weight-bold" column sm="12">
-                                        RefId
-                                    </Form.Label>
-                                    <Col sm="12">
-                                        <p className="custom-input">{this.state.getApiResponse._id}</p>
-                                    </Col>
-                                </Form.Group>
-                                <Form.Group as={Row} controlId="formPlaintextEmail">
-                                    <Form.Label className="font-weight-bold" column sm="12">
-                                        Email
-                                    </Form.Label>
-                                    <Col sm="12">
-                                        <p className="custom-input">{this.state.getApiResponse.email}</p> 
-                                    </Col>
-                                </Form.Group>
-                            </Form>
-                        
-                    </Card.Body>
-                </Card>
-                {/* <Card className="mb-4">
-                    <Card.Header as="h5">Edit Details</Card.Header>
-                    <Card.Body>
-                        <Form.Group as={Row} controlId="formPlaintextEmail">
-                            <Form.Label className="font-weight-bold" column sm="12">
-                                Set Username
-                            </Form.Label>
-                            <Col sm="12">
-                                <InputGroup className="mb-3">
-                                    <FormControl
-                                    name="setUsername"
-                                    onChange={this.handleInputChange}
-                                    />
-                                    <InputGroup.Append>
-                                    <Button variant="outline-secondary">Button</Button>
-                                    </InputGroup.Append>
-                                </InputGroup>
-                                <p><small>{this.state.validateRegx.username}</small></p>
-                            </Col>
-                        </Form.Group>
-                    </Card.Body>
-                </Card> */}
-                
-                        <Card className="mb-4">
-                        <Card.Header>Edit Profile</Card.Header>
+        return(
+            
+                    <Card className="mb-4">
+                        <Card.Header>Add Employee Profile</Card.Header>
                         <Card.Body className="pb-0">
                             <Form>
                                 <Row>
@@ -205,7 +90,26 @@ class Profile extends React.Component {
                                         </Form.Group>   
                                     </Col>
                                 </Row>
-                                
+                                <Row>
+                                <Col sm={6}>
+                                        <Form.Group  className="mb-4">
+                                            <Form.Label className="font-weight-semibold">Company Name</Form.Label>
+                                            <Form.Control type="text" placeholder="Devcorns Innvovation" />
+                                        </Form.Group>
+                                    </Col>
+                                    <Col sm={6}>
+                                        <Form.Group  className="mb-4">
+                                            <Form.Label className="font-weight-semibold">Employee Review  </Form.Label>
+                                            <Form.Control as="select" custom>
+                                                <option>1 </option>
+                                                <option>2 </option>
+                                                <option>3 </option>
+                                                <option>4 </option>
+                                                <option>5 </option>
+                                            </Form.Control>
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
                                 <Row>
                                 <Col sm={6}>
                                         <Form.Group  className="mb-4">
@@ -220,37 +124,15 @@ class Profile extends React.Component {
                                         </Form.Group>
                                     </Col>
                                 </Row>
-                                <Row>
-                                <Col sm={12}>
-                                        <Form.Group  className="mb-4">
-                                            <Form.Label className="font-weight-semibold">Company Name</Form.Label>
-                                            <Form.Control type="text" placeholder="Devcorns Innvovation" />
-                                        </Form.Group>
-                                    </Col>
-                                    {/* <Col sm={6}>
-                                        <Form.Group  className="mb-4">
-                                            <Form.Label className="font-weight-semibold">Employee Review  </Form.Label>
-                                            <Form.Control as="select" custom>
-                                                <option>1 </option>
-                                                <option>2 </option>
-                                                <option>3 </option>
-                                                <option>4 </option>
-                                                <option>5 </option>
-                                            </Form.Control>
-                                        </Form.Group>
-                                    </Col> */}
-                                </Row>
                             </Form>
                         </Card.Body>
                         <Card.Footer className="text-right">
                             <Button variant="success" >Add Employee</Button>
                         </Card.Footer>
-                    </Card> 
-                    
-            </Container>   
-        </main> 
-    )
+                    </Card>
+                
+        )
     }
 }
 
-export default Profile;
+export default AddEmployee;

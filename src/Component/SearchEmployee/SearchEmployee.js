@@ -1,6 +1,7 @@
 import React from "react";
 
 import {Container, Card, Form, Col, Row} from "react-bootstrap";
+import AddEmployee from "./AddEmployee"
 import './SearchEmployee.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -103,6 +104,7 @@ class SearchEmployee extends React.Component {
                         </Row>
                         
                     </Card>
+                    <AddEmployee />
                 </Container>
             </main>
         )
