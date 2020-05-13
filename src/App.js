@@ -13,6 +13,7 @@ import Login from "./Component/LoginLayout/Login";
 import Register from "./Component/LoginLayout/Register";
 import Dashboard from "./Component/BackendLayout/BackendLayout";
 import Profile from "./Component/Profile/Profile";
+import SearchCompany from "./Component/SearchCompany/SearchCompany";
 
 
 
@@ -29,6 +30,7 @@ class App extends React.Component {
         <Link to="/login" className="nav-link">Login</Link>
         
         <Link to="/profile" className="nav-link">Profile</Link>
+        <Link to="/search-company" className="nav-link">Search Company</Link>
     </Nav>
     <Form inline>
       <FormControl type="text" placeholder="Search" className="mr-sm-2" />
@@ -47,6 +49,9 @@ class App extends React.Component {
           </Route>
           <Route path="/profile">
             <Profile />
+          </Route>
+          <Route path="/search-company">
+            <SearchCompany />
           </Route>
         </Switch>
       </div>

@@ -1,0 +1,14 @@
+.add-new-company {
+    /* border:1px solid #ddd; */
+    min-height: 200px;
+    font-size: 150px;
+    line-height: 150px;
+    text-align: center;
+    color: rgb(124, 124, 124);
+    display: block;
+    cursor: pointer;
+}
+.add-new-company > span {
+    font-size: 30px;
+    display: block;
+}
