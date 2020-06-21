@@ -1,6 +1,17 @@
 import React from "react";
 
+import CountryCodes  from './../Data/CountryCodes.json';
+import ProfileDatas  from './../Data/ProfileData.json';
+import SimpleReactValidator from 'simple-react-validator';
+
 import {Card, Form, Col, Row, Button} from "react-bootstrap";
+import Dropzone from "./../UI/Dropzone/Dropzone"
+
+import 'react-dropzone-uploader/dist/styles.css'
+
+
+
+
 import './SearchEmployee.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -8,56 +19,59 @@ import { faUser,faCoffee,faStar, faStarHalf, faStarHalfAlt, faPlus, faPlusCircle
 import Axios from "axios";
 library.add(faUser,faCoffee,faStar,faStarHalf,faStarHalfAlt,faPlus, faPlusCircle );
 
+
+
 class AddEmployee extends React.Component {
+
+    
+ 
+    
+
+    constructor(props) {
+        super(props);
+        this.validator = new SimpleReactValidator({autoForceUpdate: this});
+        this.onDrop = this.onDrop.bind(this);
+    }
+
+    componentWillMount() {
+        this.validator = new SimpleReactValidator({autoForceUpdate: this});
+    }
+
+    
     state = {
         token: localStorage.getItem("edb-token"),
-        experienceInYear : [],
+        
         profileData : [
-            {title:"Accountant",id:1},
-            {title:"Business analyst",id:2},
-            {title:"Data analyst",id:3},
-            {title:"CEO",id:4},
-            {title:"Content developer",id:5},
-            {title:"Product manager",id:6},
-            {title:"Marketing manager",id:7},
-            {title:"Software developer",id:8},
-            {title:"Customer relationship manager",id:9},
-            {title:"Solutions architect",id:10},
-            {title:"Machine learning engineer",id:11},
-            {title:"Digital marketer",id:12},
-            {title:"Data security analyst",id:13},
-            {title:"Business intelligence analyst",id:14},
-            {title:"Teacher",id:15},
-            {title:"Social media manager",id:16},
-            {title:"Project manager",id:17},
-            {title:"Financial management consultant",id:18},
-            {title:"Sales representative",id:19},
-            {title:"IT",id:20},
-            {title:"Operation manager",id:21},
-            {title:"HR manager",id:22},
-            {title:"Insurance advisor",id:23},
-            {title:"Doctor",id:24},
-            {title:"Lawyer",id:25}
+            ...ProfileDatas
         ],
+        countryCodesFromJson: [...CountryCodes],
         empReview:1,
         empProfile:1,
         firstName:"",
         secondName:"",
         totalExp:1,
         mobile:"",
-        email:""
+        email:"",
+        countryCode:"india",
+        companyName:"",
+        userimg:"",
+        experienceInYear : [],
     }
 
-    addEmp = () => {
-
-
-        // Axios.post("http://localhost:3000/api/user/register-via-behalf",{token:this.state.token},{ headers: {
-        //     'Content-Type': 'application/json'
-        //     }}).then(function(res,err) {
-        //     console.log(res,err);
-        // })
-        console.log(this.state)
+    onDrop = (acceptedFiles) => {
+        console.log(acceptedFiles);
     }
+
+    // addEmp = () => {
+
+
+    //     Axios.post("http://localhost:3000/api/user/register-via-behalf",{data:this.state},{ headers: {
+    //         'Content-Type': 'application/json'
+    //         }}).then(function(res,err) {
+    //         console.log(res,err);
+    //     })
+    //     // console.log({...this.state})
+    // }
 
     changeHandleInput = (e) => {
         console.log(e.target.name,e.target.value)
@@ -69,6 +83,47 @@ class AddEmployee extends React.Component {
         this.setState({[e.target.name]: e.target.value});
     }
     
+    handleFileUpload = img => {
+        
+        var imgToBase64data;
+        var reader = new FileReader();
+        reader.readAsDataURL(img); 
+        reader.onloadend = () => {
+            imgToBase64data = reader.result;                
+            console.log(imgToBase64data);
+            this.setState({
+                userimg:imgToBase64data
+            })
+            return;
+        }
+
+       
+        
+        
+        
+        // const fd = new FormData();
+        // fd.append("image",this.state.img.name);
+        // console.log(fd);
+
+        
+    }
+
+    // getMobileValidity = () => {
+    //     alert();
+    // }
+
+    submitForm = e => {
+        if (this.validator.allValid()) {
+            Axios.post("http://localhost:3000/api/user/register-via-behalf",{formData:this.state},{ headers: {
+                'Content-Type': 'application/json'
+                }}).then(function(res,err) {
+                console.log(res,err);
+            });
+        } else {
+            this.validator.showMessages();
+        }
+      }
+
 
     render() {
         
@@ -87,6 +142,10 @@ class AddEmployee extends React.Component {
         return <option id={index+1} key={index+1}>{index+1}</option>
         })
 
+        var ctryCode = this.state.countryCodesFromJson.map((item,index)=>{
+        return <option  key={index} value={item.code}>{item.name}</option>
+        })
+
         return(
                     <Card className="mb-4">
                         <Card.Header>Add Employee Profile</Card.Header>
@@ -96,13 +155,15 @@ class AddEmployee extends React.Component {
                                     <Col sm={6}>
                                         <Form.Group  controlId="formBasicEmail">
                                             <Form.Label className="font-weight-semibold">First Name</Form.Label>
-                                            <Form.Control name="firstName" onChange={this.changeHandleInput} type="text" placeholder="Mark" />
+                                            <Form.Control name="firstName" value={this.state.firstName} onChange={this.changeHandleInput} type="text" placeholder="Mark" />
+                                            <span className="text-danger">{this.validator.message('firstName', this.state.firstName, 'required|min:4|alpha')}</span>
                                         </Form.Group>   
                                     </Col>
                                     <Col sm={6}>
                                         <Form.Group controlId="formBasicPassword" className="mb-4">
                                             <Form.Label className="font-weight-semibold">Last Name</Form.Label>
                                             <Form.Control name="secondName" type="text" placeholder="Zuckerberg" onChange={this.changeHandleInput} />
+                                            <span className="text-danger">{this.validator.message('secondName', this.state.secondName, 'required|min:4|alpha')}</span>
                                         </Form.Group>
                                     </Col>
                                 </Row>
@@ -128,7 +189,8 @@ class AddEmployee extends React.Component {
                                 <Col sm={6}>
                                         <Form.Group  className="mb-4">
                                             <Form.Label className="font-weight-semibold">Company Name</Form.Label>
-                                            <Form.Control name="Company Name" onChange={this.changeHandleInput}  type="text" placeholder="Devcorns Innvovation" />
+                                            <Form.Control name="companyName" onChange={this.changeHandleInput} value={this.state.companyName}  type="text" placeholder="Devcorns Innvovation" />
+                                            <span className="text-danger">{this.validator.message('companyName', this.state.companyName, 'required|min:4')}</span>
                                         </Form.Group>
                                     </Col>
                                     <Col sm={6}>
@@ -141,23 +203,45 @@ class AddEmployee extends React.Component {
                                     </Col>
                                 </Row>
                                 <Row>
-                                <Col sm={6}>
+                                <Col sm={2}>
+                                        <Form.Group  className="mb-4">
+                                            <Form.Label className="font-weight-semibold">Country</Form.Label>
+                                            <Form.Control name="countryCode" as="select" onChange={this.changeHandleSelect} custom>
+                                                {ctryCode}
+                                            </Form.Control>
+                                        </Form.Group>
+                                </Col>
+                                    <Col sm={4}>
                                         <Form.Group  className="mb-4">
                                             <Form.Label className="font-weight-semibold">Mobile</Form.Label>
                                             <Form.Control name="mobile" onChange={this.changeHandleInput} type="text" placeholder="+XX-9876543210" />
+                                            <span className="text-danger">{this.validator.message('mobile', this.state.mobile, 'required|integer|min:10|max:21}')}</span>
                                         </Form.Group>
                                     </Col>
                                     <Col sm={6}>
                                         <Form.Group  className="mb-4">
                                             <Form.Label className="font-weight-semibold">Email</Form.Label>
                                             <Form.Control  name="email" onChange={this.changeHandleInput} type="text" placeholder="mark.zuckerberg@gmail.com" />
+                                            <span className="text-danger">{this.validator.message('email', this.state.email, 'required|email')}</span>
                                         </Form.Group>
+                                    </Col>
+
+                                </Row>
+                                <Row>
+                                    <Col sm={12}>
+                                        <Form.Group  className="mb-4">
+                                            <Form.Label className="font-weight-semibold">User Image</Form.Label>
+                                            
+                                            <Dropzone name="userimg" uploadFile= {this.handleFileUpload} />
+                                            {/* <span className="text-danger">{this.validator.message('user image', this.state.userimg, 'required')}</span> */}
+                                        </Form.Group>
+                                        
                                     </Col>
                                 </Row>
                             </Form>
                         </Card.Body>
                         <Card.Footer className="text-right">
-                            <Button variant="success" onClick={this.addEmp} >Add Employee</Button>
+                            <Button variant="success" onClick={this.submitForm} >Add Employee</Button>
                         </Card.Footer>
                     </Card>
                 

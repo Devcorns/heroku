@@ -1,0 +1,15 @@
+.dzu-dropzone {
+    overflow: auto;
+    border: 1px solid #ddd;
+    cursor: context-menu;
+}
+
+.dzu-inputLabel {
+    color: #868686;
+    font-weight: 400;
+    font-size: 16px;
+}
+
+.dzu-inputLabelWithFiles {
+    display: none;
+}
