@@ -37,6 +37,7 @@ class AddEmployee extends React.Component {
         this.validator = new SimpleReactValidator({autoForceUpdate: this});
     }
 
+    alertMsg;
     
     state = {
         token: localStorage.getItem("edb-token"),
@@ -56,6 +57,7 @@ class AddEmployee extends React.Component {
         companyName:"",
         userimg:"",
         experienceInYear : [],
+        
     }
 
     onDrop = (acceptedFiles) => {
@@ -117,8 +119,8 @@ class AddEmployee extends React.Component {
             Axios.post("http://localhost:3000/api/user/register-via-behalf",{formData:this.state},{ headers: {
                 'Content-Type': 'application/json'
                 }}).then(function(res,err) {
-                console.log(res,err);
-            });
+                    console.log(res,err);
+                });
         } else {
             this.validator.showMessages();
         }
@@ -126,6 +128,8 @@ class AddEmployee extends React.Component {
 
 
     render() {
+
+       
         
         var profiles = this.state.profileData.map(function(item,index) {
             return <option key={index} value={index+1}>{item.title}</option>;
@@ -146,7 +150,9 @@ class AddEmployee extends React.Component {
         return <option  key={index} value={item.code}>{item.name}</option>
         })
 
-        return(
+        return(     
+
+                    
                     <Card className="mb-4">
                         <Card.Header>Add Employee Profile</Card.Header>
                         <Card.Body className="pb-0">
