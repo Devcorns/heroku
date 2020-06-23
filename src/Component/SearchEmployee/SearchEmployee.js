@@ -2,6 +2,9 @@ import React from "react";
 
 import {Container, Card, Form, Col, Row} from "react-bootstrap";
 import AddEmployee from "./AddEmployee"
+
+import Axios from "axios";
+
 import './SearchEmployee.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -9,6 +12,14 @@ import { faUser,faCoffee,faStar, faStarHalf, faStarHalfAlt, faPlus, faPlusCircle
 library.add(faUser,faCoffee,faStar,faStarHalf,faStarHalfAlt,faPlus, faPlusCircle );
 
 class SearchEmployee extends React.Component {
+
+    componentDidMount = () => {
+        Axios.get("http://localhost:3000/api/user/get-users").then(function(res,err){
+            console.log(res);
+        })
+    }
+
+
     render() {
         return(
             <main>

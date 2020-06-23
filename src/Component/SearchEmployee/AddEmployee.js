@@ -33,6 +33,8 @@ class AddEmployee extends React.Component {
         this.onDrop = this.onDrop.bind(this);
     }
 
+    
+
     componentWillMount() {
         this.validator = new SimpleReactValidator({autoForceUpdate: this});
     }
