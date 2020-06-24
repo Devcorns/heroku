@@ -134,7 +134,7 @@ class AddEmployee extends React.Component {
        
         
         var profiles = this.state.profileData.map(function(item,index) {
-            return <option key={index} value={index+1}>{item.title}</option>;
+            return <option key={index} value={item.title}>{item.title}</option>;
         }) 
 
         var exp = this.state.profileData.map((item,index)=>{
@@ -164,14 +164,14 @@ class AddEmployee extends React.Component {
                                         <Form.Group  controlId="formBasicEmail">
                                             <Form.Label className="font-weight-semibold">First Name</Form.Label>
                                             <Form.Control name="firstName" value={this.state.firstName} onChange={this.changeHandleInput} type="text" placeholder="Mark" />
-                                            <span className="text-danger">{this.validator.message('firstName', this.state.firstName, 'required|min:4|alpha')}</span>
+                                            <span className="text-danger">{this.validator.message('firstName', this.state.firstName, 'required|min:2|alpha')}</span>
                                         </Form.Group>   
                                     </Col>
                                     <Col sm={6}>
                                         <Form.Group controlId="formBasicPassword" className="mb-4">
                                             <Form.Label className="font-weight-semibold">Last Name</Form.Label>
                                             <Form.Control name="secondName" type="text" placeholder="Zuckerberg" onChange={this.changeHandleInput} />
-                                            <span className="text-danger">{this.validator.message('secondName', this.state.secondName, 'required|min:4|alpha')}</span>
+                                            <span className="text-danger">{this.validator.message('secondName', this.state.secondName, 'required|min:2|alpha')}</span>
                                         </Form.Group>
                                     </Col>
                                 </Row>

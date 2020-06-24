@@ -1,6 +1,10 @@
 import React from "react";
 
-import {Container, Card, Form, Col, Row} from "react-bootstrap";
+import SearchBox from "./Search/Search";
+
+import ProfileDatas from "./../Data/ProfileData.json";
+
+import {Container, Card, Form, Col, Row, Image} from "react-bootstrap";
 import AddEmployee from "./AddEmployee"
 
 import Axios from "axios";
@@ -13,94 +17,76 @@ library.add(faUser,faCoffee,faStar,faStarHalf,faStarHalfAlt,faPlus, faPlusCircle
 
 class SearchEmployee extends React.Component {
 
+    state = {
+        users: [],
+        profileData:[...ProfileDatas],
+        debouceVal: 1
+    }
+
     componentDidMount = () => {
-        Axios.get("http://localhost:3000/api/user/get-users").then(function(res,err){
+        
+        Axios.get("http://localhost:3000/api/user/get-users").then((res,err)=>{
+            
+            if(err) throw err;
+            
+            this.setState(
+                {
+                    users:[...res.data]
+                }
+            );
+           console.log(this.state)
+        })
+
+    }
+
+    handleSearch = (e) => {
+        Axios.get("http://localhost:3000/api/user/get-users",{
+            params: {
+                firstName:e.target.value
+            }
+          }).then((res,err)=>{
             console.log(res);
         })
     }
 
-
     render() {
+
         return(
             <main>
                 <Container>
-            <Card className="mb-4">
-                        <Card.Body>
-                            <Form.Group controlId="formBasicEmail">
-                                <h6>Search Employee</h6>
-                                <Form.Control type="text" placeholder="Prakhar Mathur" name="company-search" />
-                            </Form.Group>
-                        </Card.Body>
-                    </Card>
-                    <Card className="mb-4 ">
-                        <Card.Body className="pb-0">
-                        <Row>
-                            <Col sm={{span:6}} md={{ span: 4 }}>
+                    <SearchBox search={this.handleSearch} />
+
+                    <Row>
+                        {
+                            this.state.users.map((item,index)=>{
+                                return (
+                                <Col sm={{span:6}} md={{ span: 4 }} key={index}>
                                 <Card className="mb-4" >
-                                    <Card.Body>
+                                     <div className="img-container">
+                                        <Card.Img  src={item.img} className="user-img"  />
+                                    </div>
+                                    <Card.Body className="users">
                                         
-                                        <Card.Title><a href="#" className="text-primary text-decoration-none">Santosh Nayak</a></Card.Title>
-                                        <Card.Subtitle className="mb-2 text-muted">Manager</Card.Subtitle>
-                                        <Card.Text className="review-stars red">
-                                            <FontAwesomeIcon icon="star" />
-                                        </Card.Text>
-                                        <Card.Link href="#">Reviews</Card.Link>
-                                    </Card.Body>
-                                </Card>
-                            </Col>
-                            <Col sm={{span:6}} md={{ span: 4 }}>
-                                <Card className="mb-4" >
-                                    <Card.Body>
+                                        <Card.Title><a href="#" className="text-primary text-decoration-none">{item.firstName} {item.lastName}</a></Card.Title>
+                                        <Card.Subtitle className="mb-2 text-muted">
+                                                 {item.Profile}
+                                        </Card.Subtitle>
                                         
-                                        <Card.Title><a href="#" className="text-primary text-decoration-none">Prakhar Mathur</a></Card.Title>
-                                        <Card.Subtitle className="mb-2 text-muted">UI Developer</Card.Subtitle>
-                                        <Card.Text className="review-stars">
-                                            <FontAwesomeIcon icon="star" />
-                                            <FontAwesomeIcon icon="star" />
-                                            <FontAwesomeIcon icon="star" />
-                                            <FontAwesomeIcon icon="star" />
-                                            <FontAwesomeIcon icon="star" />
+                                        <Card.Text className={item.rating>2?'review-stars':'review-stars red'}  >
+                                            {[...Array(item.rating)].map((x, i) =>
+                                                
+                                                <FontAwesomeIcon icon="star" key={i}   />
+                                            )}
                                         </Card.Text>
                                         <Card.Link href="#">Reviews</Card.Link>
                                     </Card.Body>
                                 </Card>
                             </Col>
-                            <Col sm={{span:6}} md={{ span: 4 }}>
-                                <Card className="mb-4" >
-                                    <Card.Body>
-                                        <Card.Title><a href="#" className="text-primary text-decoration-none">Raj Singh</a></Card.Title>
-                                        <Card.Subtitle className="mb-2 text-muted">Android Developer</Card.Subtitle>
-                                        <Card.Text className="review-stars">
-                                            <FontAwesomeIcon icon="star" />
-                                            <FontAwesomeIcon icon="star" />
-                                            <FontAwesomeIcon icon="star" />
-                                            <FontAwesomeIcon icon="star" />
-                                            <FontAwesomeIcon icon="star" />
-                                        </Card.Text>
-                                        <Card.Link href="#">Reviews</Card.Link>
-                                    </Card.Body>
-                                </Card>
-                            </Col>
-                            <Col sm={{span:6}} md={{ span: 4 }}>
-                                <Card className="mb-4" >
-                                    <Card.Body>
-                                        <Card.Title><a href="#" className="text-primary text-decoration-none">Siddartha Sharma</a></Card.Title>
-                                        <Card.Subtitle className="mb-2 text-muted">UI Developer</Card.Subtitle>
-                                        <Card.Text className="review-stars">
-                                            <FontAwesomeIcon icon="star" />
-                                            <FontAwesomeIcon icon="star" />
-                                            <FontAwesomeIcon icon="star" />
-                                            <FontAwesomeIcon icon="star" />
-                                            <FontAwesomeIcon icon="star" />
-                                        </Card.Text>
-                                        <Card.Link href="#">Reviews</Card.Link>
-                                    </Card.Body>
-                                </Card>
-                            </Col>
-                        </Row>
-                        </Card.Body>
-                        
-                    </Card>
+                                )
+                                
+                            }) 
+                        }
+                    </Row>
                     <Card className="mb-4">
                         <Row>
                             <Col>
