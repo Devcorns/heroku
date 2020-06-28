@@ -20,7 +20,8 @@ class SearchEmployee extends React.Component {
     state = {
         users: [],
         profileData:[...ProfileDatas],
-        debouceVal: 1
+        searchObjet: {},
+           
     }
 
     componentDidMount = () => {
@@ -39,22 +40,56 @@ class SearchEmployee extends React.Component {
 
     }
 
-    handleSearch = (e) => {
-        Axios.get("http://localhost:3000/api/user/get-users",{
-            params: {
-                firstName:e.target.value
-            }
-          }).then((res,err)=>{
-            console.log(res);
+    isToggledMoreOptions = (e) => {
+        
+        this.setState({
+            isToggled:!this.state.isToggled,
+            
+        })
+        
+
+    }
+
+    searchHandle = (e) => {
+        this.setState({
+            searchObjet: {
+                ...this.state.searchObjet,
+                [e.target.name]:  e.target.value
+            }  
         })
     }
 
-    render() {
+    handleSearchSubmit = (e) => {
+        e.preventDefault();
+        console.log(this.state.searchObjet)
+        Axios.get("http://localhost:3000/api/user/get-users",{
+            params: {
+                ...this.state.searchObjet
+            }
+        }).then(users=>{
+            if(users.data.length) {
+                this.setState({
+                users:users.data
+                })
+            } else {
+                this.setState({
+                    users:[]
+                })
+            }
+            
+        })
+        
+    }
 
+ 
+
+    
+
+    render() {
         return(
             <main>
                 <Container>
-                    <SearchBox search={this.handleSearch} />
+                    <SearchBox search={this.handleSearchSubmit} searchHandle={this.searchHandle}  />
 
                     <Row>
                         {

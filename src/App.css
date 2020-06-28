@@ -30,3 +30,36 @@ main {
     border-bottom: 1px solid #f1f1f1;
     margin: 30px 0;
 }
+
+
+.field {
+    padding-top: 30px;
+    display: flex;
+    /* flex-direction: column; */
+}
+
+label.moving-fn {
+    padding-left: 5px;
+    transition: all 0.3s ease-in;
+    transform: translateY(-25px);
+    pointer-events: none;
+    position: absolute;
+}
+
+input:focus + label.moving-fn {
+    transform: translateY(-30px);
+    font-size: 14px;
+}
+
+
+input.form-control {
+    border:none;
+    border-bottom: 1px solid #ddd;
+    border-radius: 0;
+    padding: 10px 5px;
+    height: 25px;
+
+}
+input.form-control:focus {
+    box-shadow: none;
+}
