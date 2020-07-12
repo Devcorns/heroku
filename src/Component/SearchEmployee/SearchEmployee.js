@@ -21,7 +21,12 @@ class SearchEmployee extends React.Component {
         users: [],
         profileData:[...ProfileDatas],
         searchObjet: {},
+        alertMsg:"",
            
+    }
+
+    getToken = () => {
+        return localStorage.getItem("edb-token");
     }
 
     componentDidMount = () => {
@@ -29,13 +34,15 @@ class SearchEmployee extends React.Component {
         Axios.get("http://localhost:3000/api/user/get-users").then((res,err)=>{
             
             if(err) throw err;
-            
-            this.setState(
-                {
-                    users:[...res.data]
-                }
-            );
-           console.log(this.state)
+
+            if(Array.isArray(res.data)) {
+                this.setState(
+                    {
+                        users:[...res.data]
+                    }
+                );
+            } 
+           //console.log(this.state,"This is user id",this.state.users[0]._id)
         })
 
     }
@@ -73,15 +80,25 @@ class SearchEmployee extends React.Component {
                 })
             } else {
                 this.setState({
-                    users:[]
+                    users:[],
+                    alertMsg: users.data.message
                 })
             }
-            
         })
         
     }
 
+    reviewsFn = (e) => {
+        e.preventDefault();
+        Axios.post("http://localhost:3000/api/user/reviews",{"userId":e.target.name,"token":this.getToken()},{ headers: {
+        'Content-Type': 'application/json'
+        }}).then(function(res,err) {
+            console.log(res,err);
+        });
+    }
+
  
+
 
     
 
@@ -93,34 +110,44 @@ class SearchEmployee extends React.Component {
 
                     <Row>
                         {
+                            this.state.users.length>0?  
                             this.state.users.map((item,index)=>{
                                 return (
-                                <Col sm={{span:6}} md={{ span: 4 }} key={index}>
-                                <Card className="mb-4" >
-                                     <div className="img-container">
-                                        <Card.Img  src={item.img} className="user-img"  />
-                                    </div>
-                                    <Card.Body className="users">
-                                        
-                                        <Card.Title><a href="#" className="text-primary text-decoration-none">{item.firstName} {item.lastName}</a></Card.Title>
-                                        <Card.Subtitle className="mb-2 text-muted">
-                                                 {item.Profile}
-                                        </Card.Subtitle>
-                                        
-                                        <Card.Text className={item.rating>2?'review-stars':'review-stars red'}  >
-                                            {[...Array(item.rating)].map((x, i) =>
-                                                
-                                                <FontAwesomeIcon icon="star" key={i}   />
-                                            )}
-                                        </Card.Text>
-                                        <Card.Link href="#">Reviews</Card.Link>
-                                    </Card.Body>
-                                </Card>
-                            </Col>
+                                    <Col sm={{span:6}} md={{ span: 4 }} key={index}>
+                                    <Card className="mb-4"  >
+                                         <div className="img-container">
+                                            <Card.Img  src={item.img} className="user-img"  />
+                                        </div>
+                                        <Card.Body className="users">
+                                            
+                                            <Card.Title><a href="#" className="text-primary text-decoration-none text-capitalize">{item.firstName} {item.lastName}</a></Card.Title>
+                                            <Card.Subtitle className="mb-2 text-muted text-capitalize">
+                                                     {item.Profile}
+                                            </Card.Subtitle>
+                                            
+                                            <Card.Text className={item.rating>2?'review-stars':'review-stars red'}  >
+                                                {[...Array(item.rating)].map((x, i) =>
+                                                    <FontAwesomeIcon icon="star" key={i}   />
+                                                )}
+                                            </Card.Text>
+                                            <Card.Link name={item._id}  onClick={this.reviewsFn} >Reviews</Card.Link>
+                                        </Card.Body>
+                                    </Card>
+                                </Col>
                                 )
-                                
-                            }) 
+                            }) : <Col  >
+                                    <Card className="mb-4" >
+                                    
+                                        <Card.Body className="users"> 
+                                        {this.state.alertMsg}
+                                        </Card.Body>
+                                    </Card>
+                                </Col>
                         }
+                        
+                        {/* {
+                            
+                        } */}
                     </Row>
                     <Card className="mb-4">
                         <Row>
